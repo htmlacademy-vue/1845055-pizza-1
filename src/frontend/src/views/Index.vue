@@ -32,27 +32,15 @@
                 <label
                   v-for="elemDough in onlyDough"
                   :key="elemDough.name"
-                  :class="{
-                    'dough__input dough__input--light':
-                      elemDough.name == 'Тонкое',
-                    'dough__input dough__input--large':
-                      elemDough.name == 'Толстое',
-                  }"
+                  class="dough__input"
+                  :class="getClassDough(elemDough.name)"
                 >
                   <input
-                    v-if="elemDough.name == 'Тонкое'"
                     type="radio"
                     name="dought"
-                    value="light"
+                    :value="getValueDough(elemDough.name)"
                     class="visually-hidden"
-                    checked
-                  />
-                  <input
-                    v-else
-                    type="radio"
-                    name="dought"
-                    value="large"
-                    class="visually-hidden"
+                    :checked="elemDough.name == 'Тонкое'"
                   />
                   <b>{{ elemDough.name }}</b>
                   <span>{{ elemDough.description }}</span>
@@ -69,36 +57,15 @@
                 <label
                   v-for="elemSize in onlySize"
                   :key="elemSize.name"
-                  :class="{
-                    'diameter__input diameter__input--small':
-                      elemSize.name == '23 см',
-                    'diameter__input diameter__input--normal':
-                      elemSize.name == '32 см',
-                    'diameter__input diameter__input--big':
-                      elemSize.name == '45 см',
-                  }"
+                  class="diameter__input"
+                  :class="getClassSize(elemSize.name)"
                 >
                   <input
-                    v-if="elemSize.name == '23 см'"
                     type="radio"
                     name="diameter"
-                    value="small"
+                    :value="getValueSize(elemSize.name)"
                     class="visually-hidden"
-                  />
-                  <input
-                    v-if="elemSize.name == '32 см'"
-                    type="radio"
-                    name="diameter"
-                    value="normal"
-                    class="visually-hidden"
-                    checked
-                  />
-                  <input
-                    v-if="elemSize.name == '45 см'"
-                    type="radio"
-                    name="diameter"
-                    value="big"
-                    class="visually-hidden"
+                    :checked="elemSize.name == '32 см'"
                   />
                   <span>{{ elemSize.name }}</span>
                 </label>
@@ -122,13 +89,11 @@
                     class="radio ingridients__input"
                   >
                     <input
-                      v-if="elemSauces.name == 'Томатный'"
                       type="radio"
                       name="sauce"
-                      value="tomato"
-                      checked
+                      :value="getValueSauces(elemSauces.name)"
+                      :checked="elemSauces.name == 'Томатный'"
                     />
-                    <input v-else type="radio" name="sauce" value="creamy" />
                     <span>{{ elemSauces.name }}</span>
                   </label>
                 </div>
@@ -605,6 +570,45 @@ export default {
     },
   },
   methods: {
+    getValueDough(name) {
+      if (name == "Тонкое") {
+        return "light";
+      } else {
+        return "large";
+      }
+    },
+    getClassDough(name) {
+      if (name == "Тонкое") {
+        return "dough__input--light";
+      } else {
+        return "dough__input--large";
+      }
+    },
+    getValueSize(name) {
+      if (name == "23 см") {
+        return "small";
+      } else if (name == "32 см") {
+        return "normal";
+      } else if (name == "45 см") {
+        return "big";
+      }
+    },
+    getClassSize(name) {
+      if (name == "23 см") {
+        return "diameter__input--small";
+      } else if (name == "32 см") {
+        return "diameter__input--normal";
+      } else if (name == "45 см") {
+        return "diameter__input--big";
+      }
+    },
+    getValueSauces(name) {
+      if (name == "Томатный") {
+        return "tomato";
+      } else {
+        return "creamy";
+      }
+    },
     getClassIngredients(name) {
       if (name == "Грибы") {
         return "filling--mushrooms";
