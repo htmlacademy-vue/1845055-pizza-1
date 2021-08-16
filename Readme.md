@@ -1,6 +1,6 @@
 # Личный проект «VuePizza»
 
-* Студент: [Юлия Щелочкова](https://up.htmlacademy.ru/vue/1/user/1845055).
+- Студент: [Юлия Щелочкова](https://up.htmlacademy.ru/vue/1/user/1845055).
 
 ---
 
@@ -48,19 +48,23 @@ git clone SSH-адрес_вашего_форка
 Репозиторий создан для обучения на профессиональном онлайн‑курсе «[Vue.js для опытных разработчиков](https://htmlacademy.ru/intensive/vue)» от [HTML Academy](https://htmlacademy.ru).
 
 ## Начальные требования
+
 - Docker
 - Docker-compose
 - NodeJS 10+
 - Pre commit (optional)
 
 ## Docker документация и установка
+
 https://docs.docker.com/get-docker/
 https://dker.ru/docs/ (рус)
 
 ## Docker-compose документация и установка
+
 https://docs.docker.com/compose/install/
 
 ## Node js документация и установка
+
 https://nodejs.org/en/download/
 
 ## Pre-commit документация и установка
@@ -93,7 +97,7 @@ https://nodejs.org/en/download/
 
 - Выполнить команду
 
-`$ docker-compose build .`
+`$ docker-compose build`
 
 - Запустить проект с помощью команды
 
@@ -114,6 +118,7 @@ password: user@example.com
 Вы можете поменять данные пользователя в файле `src/backend/src/factory/users.json`
 
 ## Документация эндпоинтов сервера (OpenAPI)
+
 Запустите проект и перейдите по адресу
 
 ```
@@ -123,6 +128,7 @@ http://localhost:3000/explorer/
 ## Запуск и просмотр готовой верстки проекта
 
 Перейтите в директорию
+
 ```
 template/
 ```
