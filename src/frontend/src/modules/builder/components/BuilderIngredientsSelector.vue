@@ -32,7 +32,10 @@
               :key="elemIngredients.name"
               class="ingridients__item"
             >
-              <AppDrag :transferData="elemIngredients">
+              <AppDrag
+                :transferData="elemIngredients"
+                :draggableValue="draggableValue(elemIngredients.name)"
+              >
                 <span
                   class="filling"
                   :class="getClassIngredients(elemIngredients.name)"
@@ -78,34 +81,47 @@
 
 <script>
 import AppDrag from "@/common/components/AppDrag.vue";
+import { counterLimit } from "@/modules/builder/constants.js";
 
 export default {
   name: "BuilderIngredientsSelector",
   components: {
     AppDrag,
   },
-  data: () => {
-    return {
-      counterLimit: {
-        min: 0,
-        max: 3,
-      },
-    };
-  },
   props: {
     onlySauces: {
       type: Array,
+      required: true,
     },
-    builderPizzaIngredients: Array,
-    statePizza: Object,
+    builderPizzaIngredients: {
+      type: Array,
+      required: true,
+    },
+    statePizza: {
+      type: Object,
+      required: true,
+    },
   },
+  // data: () => {
+  //   return {
+  //     counterLimit: counterLimit,
+  //   };
+  // },
   methods: {
+    draggableValue(ingredientName) {
+      if (typeof this.statePizza.ingredients[ingredientName] != "undefined") {
+        if (this.statePizza.ingredients[ingredientName].valQuantity >= 3) {
+          return false;
+        }
+      }
+      return true;
+    },
     disabledButton(counter, ingredient) {
       let valQuantity = this.valIngredients(ingredient);
       if (counter == "plus") {
-        return valQuantity >= this.counterLimit.max;
+        return valQuantity >= counterLimit.max;
       } else {
-        return valQuantity <= this.counterLimit.min;
+        return valQuantity <= counterLimit.min;
       }
     },
     valIngredients(ingredient) {

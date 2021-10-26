@@ -15,7 +15,7 @@
             name="dought"
             :value="getValueDough(elemDough.name)"
             class="visually-hidden"
-            :checked="elemDough.name == 'Тонкое'"
+            :checked="elemDough.name == defaultDough"
             @input="setDough(elemDough)"
           />
           <b>{{ elemDough.name }}</b>
@@ -30,7 +30,14 @@
 export default {
   name: "BuilderDoughSelector",
   props: {
-    onlyDough: Array,
+    onlyDough: {
+      type: Array,
+      required: true,
+    },
+    defaultDough: {
+      type: String,
+      required: true,
+    },
   },
   methods: {
     setDough(val) {

@@ -6,6 +6,7 @@
 
         <BuilderDoughSelector
           :onlyDough="pizza['dough']"
+          :defaultDough="statePizza['dough']['name']"
           @setDough="setDough"
         />
 
@@ -21,7 +22,7 @@
 
         <BuilderPizzaView
           :statePizza="statePizza"
-          :setTotalPrice="setTotalPrice"
+          @setName="setName"
           @setDrop="setDrop"
         />
       </div>
@@ -50,7 +51,7 @@ export default {
       pizza: pizza,
       statePizza: {
         name: "",
-        totalPrice: 0,
+        totalPrice: 700,
         dough: {
           name: "Тонкое",
           price: 300,
@@ -64,26 +65,28 @@ export default {
         },
         ingredients: {},
       },
-      builderIng: {},
     };
   },
   methods: {
     setDrop(val) {
       this.setBuilderQuantity("plus", val);
     },
+    setName(val) {
+      this.statePizza.name = val;
+    },
     setMulti(val) {
       this.statePizza.size.multi = val;
+      this.priceCounter();
     },
     setDough(val) {
       this.statePizza.dough.name = val.name;
       this.statePizza.dough.price = val.price;
+      this.priceCounter();
     },
     setSauces(val) {
       this.statePizza.sauces.name = val.name;
       this.statePizza.sauces.price = val.price;
-    },
-    setTotalPrice(val) {
-      this.statePizza.totalPrice = val;
+      this.priceCounter();
     },
     setBuilderQuantity(counter, ingredient) {
       let valQuantity = 0;
@@ -100,9 +103,10 @@ export default {
         price: ingredient.price,
         valQuantity: valQuantity,
       });
+      this.priceCounter();
     },
     checkQuantity(val) {
-      if (val > 3) {
+      if (val >= 3) {
         val = 3;
       } else if (val < 0) {
         val = 0;
@@ -110,20 +114,18 @@ export default {
       return val;
     },
     priceCounter() {
-      let totalPrice = 0;
       let multi = this.statePizza.size.multi;
       let priceDough = this.statePizza.dough.price;
       let priceSauce = this.statePizza.sauces.price;
       let priceIngredient = 0;
-      // console.log("object");
       for (let i in this.statePizza.ingredients) {
         priceIngredient =
           priceIngredient +
           this.statePizza.ingredients[i].price *
             this.statePizza.ingredients[i].valQuantity;
       }
-      totalPrice = multi * (priceDough + priceSauce + priceIngredient);
-      this.setTotalPrice(totalPrice);
+      this.statePizza.totalPrice =
+        multi * (priceDough + priceSauce + priceIngredient);
     },
   },
 };

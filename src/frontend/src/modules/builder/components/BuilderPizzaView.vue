@@ -6,13 +6,13 @@
         type="text"
         name="pizza_name"
         placeholder="Введите название пиццы"
-        v-model="statePizza.name"
+        @input="setName()"
       />
     </label>
 
     <AppDrop @drop="setDrop">
       <div class="content__constructor">
-        <div class="pizza" :class="getClassPizza()">
+        <div class="pizza" :class="getClassPizza">
           <div class="pizza__wrapper">
             <div
               v-for="(elemIngredients, key) in statePizza.ingredients"
@@ -25,10 +25,7 @@
       </div>
     </AppDrop>
 
-    <BuilderPriceCounter
-      :statePizza="statePizza"
-      :setTotalPrice="setTotalPrice"
-    />
+    <BuilderPriceCounter :statePizza="statePizza" />
   </div>
 </template>
 
@@ -42,11 +39,13 @@ export default {
   },
   name: "BuilderPizzaView",
   props: {
-    statePizza: Object,
-    setTotalPrice: Function,
+    statePizza: {
+      type: Object,
+      required: true,
+    },
   },
-  methods: {
-    getClassPizza() {
+  computed: {
+    getClassPizza: function () {
       let className = "pizza--foundation--";
       if (this.statePizza.dough.name == "Тонкое") {
         className += "small-";
@@ -58,8 +57,12 @@ export default {
       } else {
         className += "creamy";
       }
-      // console.log(className);
       return className;
+    },
+  },
+  methods: {
+    setName() {
+      this.$emit("setName", event.target.value);
     },
     getClassIngredients(name) {
       if (name == "Грибы") {

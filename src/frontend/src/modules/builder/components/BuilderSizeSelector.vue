@@ -31,6 +31,7 @@ export default {
   props: {
     onlySize: {
       type: Array,
+      required: true,
     },
   },
   methods: {
