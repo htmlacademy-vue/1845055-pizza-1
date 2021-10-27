@@ -6,22 +6,28 @@
 
         <BuilderDoughSelector
           :onlyDough="pizza['dough']"
-          :defaultDough="statePizza['dough']['name']"
+          :selectedDough="statePizza['dough']['name']"
           @setDough="setDough"
         />
 
-        <BuilderSizeSelector :onlySize="pizza['sizes']" @setMulti="setMulti" />
+        <BuilderSizeSelector
+          :onlySize="pizza['sizes']"
+          :selectedSize="statePizza['size']['diametr']"
+          @setMulti="setMulti"
+        />
 
         <BuilderIngredientsSelector
           :statePizza="statePizza"
           :onlySauces="pizza['sauces']"
           :builderPizzaIngredients="pizza['ingredients']"
+          :selectedSauces="statePizza['sauces']['name']"
           @setBuilderQuantity="setBuilderQuantity"
           @setSauces="setSauces"
         />
 
         <BuilderPizzaView
           :statePizza="statePizza"
+          :totalPrice="priceCounter"
           @setName="setName"
           @setDrop="setDrop"
         />
@@ -58,6 +64,7 @@ export default {
         },
         size: {
           multi: 2,
+          diametr: "32 см",
         },
         sauces: {
           name: "Томатный",
@@ -66,6 +73,23 @@ export default {
         ingredients: {},
       },
     };
+  },
+  computed: {
+    priceCounter: function () {
+      let multi = this.statePizza.size.multi;
+      let priceDough = this.statePizza.dough.price;
+      let priceSauce = this.statePizza.sauces.price;
+      let priceIngredient = 0;
+      for (let i in this.statePizza.ingredients) {
+        priceIngredient =
+          priceIngredient +
+          this.statePizza.ingredients[i].price *
+            this.statePizza.ingredients[i].valQuantity;
+      }
+      this.statePizza.totalPrice =
+        multi * (priceDough + priceSauce + priceIngredient);
+      return this.statePizza.totalPrice;
+    },
   },
   methods: {
     setDrop(val) {
@@ -76,17 +100,17 @@ export default {
     },
     setMulti(val) {
       this.statePizza.size.multi = val;
-      this.priceCounter();
+      // this.priceCounter();
     },
     setDough(val) {
       this.statePizza.dough.name = val.name;
       this.statePizza.dough.price = val.price;
-      this.priceCounter();
+      // this.priceCounter();
     },
     setSauces(val) {
       this.statePizza.sauces.name = val.name;
       this.statePizza.sauces.price = val.price;
-      this.priceCounter();
+      // this.priceCounter();
     },
     setBuilderQuantity(counter, ingredient) {
       let valQuantity = 0;
@@ -103,7 +127,7 @@ export default {
         price: ingredient.price,
         valQuantity: valQuantity,
       });
-      this.priceCounter();
+      // this.priceCounter();
     },
     checkQuantity(val) {
       if (val >= 3) {
@@ -112,20 +136,6 @@ export default {
         val = 0;
       }
       return val;
-    },
-    priceCounter() {
-      let multi = this.statePizza.size.multi;
-      let priceDough = this.statePizza.dough.price;
-      let priceSauce = this.statePizza.sauces.price;
-      let priceIngredient = 0;
-      for (let i in this.statePizza.ingredients) {
-        priceIngredient =
-          priceIngredient +
-          this.statePizza.ingredients[i].price *
-            this.statePizza.ingredients[i].valQuantity;
-      }
-      this.statePizza.totalPrice =
-        multi * (priceDough + priceSauce + priceIngredient);
     },
   },
 };

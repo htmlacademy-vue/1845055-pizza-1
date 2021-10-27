@@ -1,6 +1,6 @@
 <template>
   <div class="content__result">
-    <p>Итого: {{ statePizza.totalPrice }} ₽</p>
+    <p>Итого: {{ totalPrice }} ₽</p>
     <button type="button" :class="getClassButton" :disabled="!pizzaReady">
       Готовьте!
     </button>
@@ -13,6 +13,10 @@ export default {
   props: {
     statePizza: {
       type: Object,
+      required: true,
+    },
+    totalPrice: {
+      type: Number,
       required: true,
     },
   },

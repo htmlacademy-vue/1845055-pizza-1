@@ -15,7 +15,7 @@
             name="diameter"
             :value="getValueSize(elemSize.name)"
             class="visually-hidden"
-            :checked="elemSize.name == '32 см'"
+            :checked="elemSize.name == selectedSize"
             @input="setMulti(elemSize.name)"
           />
           <span>{{ elemSize.name }}</span>
@@ -31,6 +31,10 @@ export default {
   props: {
     onlySize: {
       type: Array,
+      required: true,
+    },
+    selectedSize: {
+      type: String,
       required: true,
     },
   },

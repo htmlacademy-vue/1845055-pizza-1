@@ -15,7 +15,7 @@
             name="dought"
             :value="getValueDough(elemDough.name)"
             class="visually-hidden"
-            :checked="elemDough.name == defaultDough"
+            :checked="elemDough.name == selectedDough"
             @input="setDough(elemDough)"
           />
           <b>{{ elemDough.name }}</b>
@@ -34,7 +34,7 @@ export default {
       type: Array,
       required: true,
     },
-    defaultDough: {
+    selectedDough: {
       type: String,
       required: true,
     },

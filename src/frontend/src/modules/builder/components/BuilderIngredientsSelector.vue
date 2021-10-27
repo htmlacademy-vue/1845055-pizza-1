@@ -16,7 +16,7 @@
               type="radio"
               name="sauce"
               :value="getValueSauces(elemSauces.name)"
-              :checked="elemSauces.name == 'Томатный'"
+              :checked="elemSauces.name == selectedSauces"
               @input="setSauces(elemSauces)"
             />
             <span>{{ elemSauces.name }}</span>
@@ -99,6 +99,10 @@ export default {
     },
     statePizza: {
       type: Object,
+      required: true,
+    },
+    selectedSauces: {
+      type: String,
       required: true,
     },
   },

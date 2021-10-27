@@ -6,7 +6,7 @@
         type="text"
         name="pizza_name"
         placeholder="Введите название пиццы"
-        @input="setName()"
+        @input="setName"
       />
     </label>
 
@@ -25,7 +25,7 @@
       </div>
     </AppDrop>
 
-    <BuilderPriceCounter :statePizza="statePizza" />
+    <BuilderPriceCounter :statePizza="statePizza" :totalPrice="totalPrice" />
   </div>
 </template>
 
@@ -41,6 +41,10 @@ export default {
   props: {
     statePizza: {
       type: Object,
+      required: true,
+    },
+    totalPrice: {
+      type: Number,
       required: true,
     },
   },
@@ -61,7 +65,7 @@ export default {
     },
   },
   methods: {
-    setName() {
+    setName: function (event) {
       this.$emit("setName", event.target.value);
     },
     getClassIngredients(name) {
