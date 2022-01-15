@@ -1,33 +1,44 @@
 <template>
   <div id="app">
-    <div v-show="false" class="main">
-      <div class="main__wrapper">
-        <div class="main__header">
-          <img
-            src="@/assets/img/logo.svg"
-            width="300"
-            height="47"
-            alt="V!U!E! Pizza"
-          />
-        </div>
-        <h1>Добро пожаловать!</h1>
-        <p>
-          Это проект V!U!E! Pizza для обучения на профессиональном
-          онлайн‑курсе<br />
-          <b>«Vue.js для опытных разработчиков».</b>
-        </p>
-      </div>
-    </div>
-    <Index />
+    <AppLayout
+      :isLoggin="Store.isLoggin"
+      @userUnLoggin="setLoggin(false)"
+      @userLoggin="setLoggin(true)"
+    >
+      <router-view @userLoggin="setLoggin(true)" />
+    </AppLayout>
   </div>
 </template>
 
 <script>
-import Index from "@/views/Index.vue";
+// import user from "@/static/user.json";
+import AppLayout from "@/layouts/AppLayout.vue";
 export default {
   name: "App",
   components: {
-    Index,
+    AppLayout,
+  },
+  data() {
+    return {
+      Store: {
+        isLoggin: false,
+      },
+    };
+  },
+
+  methods: {
+    setLoggin(log) {
+      // console.log("заходим в логин");
+      this.Store.isLoggin = log;
+      if (!log) {
+        // console.log(this.$route.meta);
+        let routeNameForUnauthorized =
+          this.$route.meta.routeNameForUnauthorized;
+        if (!this.Store.isLoggin && routeNameForUnauthorized !== null) {
+          this.$router.push({ name: routeNameForUnauthorized });
+        }
+      }
+    },
   },
 };
 </script>
