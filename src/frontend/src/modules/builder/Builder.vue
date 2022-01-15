@@ -1,40 +1,43 @@
 <template>
-  <main class="content">
-    <form action="#" method="post">
-      <div class="content__wrapper">
-        <h1 class="title title--big">Конструктор пиццы</h1>
+  <section>
+    <main class="content">
+      <form action="#" method="post">
+        <div class="content__wrapper">
+          <h1 class="title title--big">Конструктор пиццы</h1>
 
-        <BuilderDoughSelector
-          :onlyDough="pizza['dough']"
-          :selectedDough="statePizza['dough']['name']"
-          @setDough="setDough"
-        />
+          <BuilderDoughSelector
+            :onlyDough="pizza['dough']"
+            :selectedDough="statePizza['dough']['name']"
+            @setDough="setDough"
+          />
 
-        <BuilderSizeSelector
-          :onlySize="pizza['sizes']"
-          :selectedSize="statePizza['size']['diametr']"
-          @setMulti="setMulti"
-        />
+          <BuilderSizeSelector
+            :onlySize="pizza['sizes']"
+            :selectedSize="statePizza['size']['diametr']"
+            @setMulti="setMulti"
+          />
 
-        <BuilderIngredientsSelector
-          :statePizza="statePizza"
-          :onlySauces="pizza['sauces']"
-          :builderPizzaIngredients="pizza['ingredients']"
-          :selectedSauces="statePizza['sauces']['name']"
-          @setBuilderQuantity="setBuilderQuantity"
-          @setSauces="setSauces"
-        />
+          <BuilderIngredientsSelector
+            :statePizza="statePizza"
+            :onlySauces="pizza['sauces']"
+            :builderPizzaIngredients="pizza['ingredients']"
+            :selectedSauces="statePizza['sauces']['name']"
+            @setBuilderQuantity="setBuilderQuantity"
+            @setSauces="setSauces"
+          />
 
-        <BuilderPizzaView
-          :statePizza="statePizza"
-          :totalPrice="priceCounter"
-          @setName="setName"
-          @setDrop="setDrop"
-        />
-      </div>
-    </form>
-    <!-- {{ statePizza }} -->
-  </main>
+          <BuilderPizzaView
+            :statePizza="statePizza"
+            :totalPrice="priceCounter"
+            @setName="setName"
+            @setDrop="setDrop"
+          />
+        </div>
+      </form>
+      <!-- {{ statePizza }} -->
+    </main>
+    <router-view @userLoggin="$emit('userLoggin')" />
+  </section>
 </template>
 
 <script>
