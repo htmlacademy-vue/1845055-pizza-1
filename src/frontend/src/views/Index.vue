@@ -1,7 +1,7 @@
 <template>
   <div>
     <!--  -->
-    <Builder @userLoggin="$emit('userLoggin')" />
+    <Builder />
   </div>
 </template>
 

@@ -21,24 +21,17 @@
     <div v-if="isLoggin" class="header__user">
       <router-link to="/profile">
         <picture>
-          <source
-            type="image/webp"
-            srcset="
-              @/assets/img/users/user5.webp    1x,
-              @/assets/img/users/user5@2x.webp 2x
-            "
-          />
+          <source type="image/webp" :srcset="user.avatar" />
           <img
-            src="@/assets/img/users/user5.jpg"
-            srcset="@/assets/img/users/user5@2x.jpg"
-            alt="Василий Ложкин"
+            :src="user.avatar"
+            :srcset="user.avatar"
             width="32"
             height="32"
           />
         </picture>
-        <span>Василий Ложкин</span>
+        <span>{{ user.name }}</span>
       </router-link>
-      <a href="#" class="header__logout" @click.prevent="$emit('userUnLoggin')">
+      <a href="#" class="header__logout" @click.prevent="userUnLoggin()">
         <span>Выйти</span>
       </a>
     </div>
@@ -48,20 +41,28 @@
 <script>
 export default {
   name: "AppLayoutHeader",
-  props: {
-    isLoggin: {
-      type: Boolean,
-      required: true,
+  computed: {
+    isLoggin: function () {
+      return this.$store.getters["Auth/isLoggin"];
+    },
+    user: function () {
+      return this.$store.getters["Auth/getUser"];
     },
   },
   methods: {
     logIn() {
       let routeNameForLogin = this.$route.meta.routeNameForLogin;
+      console.log("header" + routeNameForLogin);
       if (routeNameForLogin !== null) {
         this.$router.push({ name: routeNameForLogin });
       }
-      // console.log("object");
-      // this.$emit("userLoggin");
+    },
+    userUnLoggin() {
+      this.$store.commit("Auth/isLogg", false);
+      let routeNameForUnauthorized = this.$route.meta.routeNameForUnauthorized;
+      if (routeNameForUnauthorized !== null) {
+        this.$router.push({ name: routeNameForUnauthorized });
+      }
     },
   },
 };

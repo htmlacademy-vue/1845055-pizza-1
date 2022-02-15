@@ -29,19 +29,20 @@
 <script>
 export default {
   name: "BuilderDoughSelector",
-  props: {
-    onlyDough: {
-      type: Array,
-      required: true,
+  computed: {
+    onlyDough: function () {
+      return this.$store.getters["Builder/getPizza"]["dough"];
     },
-    selectedDough: {
-      type: String,
-      required: true,
+    selectedDough: function () {
+      return this.$store.getters["Builder/getStatePizza"]["dough"]["name"];
     },
   },
   methods: {
     setDough(val) {
-      this.$emit("setDough", val);
+      this.$store.commit("Builder/setDough", {
+        name: val.name,
+        price: val.price,
+      });
     },
     getValueDough(name) {
       if (name == "Тонкое") {

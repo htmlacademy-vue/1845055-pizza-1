@@ -1,10 +1,6 @@
 <template>
   <section>
-    <AppLayoutHeader
-      :isLoggin="isLoggin"
-      @userLoggin="$emit('userLoggin')"
-      @userUnLoggin="$emit('userUnLoggin')"
-    />
+    <AppLayoutHeader />
     <slot />
   </section>
 </template>
@@ -15,12 +11,6 @@ export default {
   name: "AppLayoutMain",
   components: {
     AppLayoutHeader,
-  },
-  props: {
-    isLoggin: {
-      type: Boolean,
-      required: true,
-    },
   },
 };
 </script>

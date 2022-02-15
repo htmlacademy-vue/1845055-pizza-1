@@ -1,11 +1,7 @@
 <template>
   <div id="app">
-    <AppLayout
-      :isLoggin="Store.isLoggin"
-      @userUnLoggin="setLoggin(false)"
-      @userLoggin="setLoggin(true)"
-    >
-      <router-view @userLoggin="setLoggin(true)" />
+    <AppLayout>
+      <router-view />
     </AppLayout>
   </div>
 </template>
@@ -18,14 +14,11 @@ export default {
   components: {
     AppLayout,
   },
-  data() {
-    return {
-      Store: {
-        isLoggin: false,
-      },
-    };
-  },
 
+  created() {
+    //this.$store.dispatch("init");
+  },
+  computed: {},
   methods: {
     setLoggin(log) {
       // console.log("заходим в логин");

@@ -28,24 +28,23 @@
 <script>
 export default {
   name: "BuilderSizeSelector",
-  props: {
-    onlySize: {
-      type: Array,
-      required: true,
+
+  computed: {
+    onlySize: function () {
+      return this.$store.getters["Builder/getPizza"]["sizes"];
     },
-    selectedSize: {
-      type: String,
-      required: true,
+    selectedSize: function () {
+      return this.$store.getters["Builder/getStatePizza"]["size"]["diametr"];
     },
   },
   methods: {
     setMulti(name) {
       if (name == "23 см") {
-        this.$emit("setMulti", 1);
+        this.$store.commit("Builder/setMulti", 1);
       } else if (name == "32 см") {
-        this.$emit("setMulti", 2);
+        this.$store.commit("Builder/setMulti", 2);
       } else if (name == "45 см") {
-        this.$emit("setMulti", 3);
+        this.$store.commit("Builder/setMulti", 3);
       }
     },
     getValueSize(name) {

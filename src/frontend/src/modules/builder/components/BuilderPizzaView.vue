@@ -25,7 +25,7 @@
       </div>
     </AppDrop>
 
-    <BuilderPriceCounter :statePizza="statePizza" :totalPrice="totalPrice" />
+    <BuilderPriceCounter />
   </div>
 </template>
 
@@ -38,17 +38,22 @@ export default {
     AppDrop,
   },
   name: "BuilderPizzaView",
-  props: {
-    statePizza: {
-      type: Object,
-      required: true,
-    },
-    totalPrice: {
-      type: Number,
-      required: true,
+  data() {
+    return {
+      statePizza: {},
+    };
+  },
+  watch: {
+    statePizza: function (val) {
+      // console.log(val);
+      // console.log(oldVal);
+      val = this.getState();
     },
   },
   computed: {
+    // statePizza: function () {
+    //   return getState();
+    // },
     getClassPizza: function () {
       let className = "pizza--foundation--";
       if (this.statePizza.dough.name == "Тонкое") {
@@ -65,8 +70,13 @@ export default {
     },
   },
   methods: {
+    getState() {
+      return this.$store.getters["Builder/getStatePizza"];
+    },
     setName: function (event) {
-      this.$emit("setName", event.target.value);
+      this.$store.commit("Builder/setName", {
+        name: event.target.value,
+      });
     },
     getClassIngredients(name) {
       if (name == "Грибы") {
@@ -104,6 +114,7 @@ export default {
       }
     },
     getClassFillingIngredients(key) {
+      console.log(key);
       let classIng = this.getClassIngredients(key);
       if (this.statePizza.ingredients[key].valQuantity == 2) {
         classIng += " pizza__filling--second";
@@ -115,8 +126,16 @@ export default {
       return classIng;
     },
     setDrop(val) {
-      this.$emit("setDrop", val);
+      this.$store.commit("Builder/setBuilderQuantity", {
+        counter: "plus",
+        ingredient: val,
+      });
+      // this.statePizza = this.$store.getters["Builder/getStatePizza"];
+      //this.$emit("setDrop", val);
     },
+  },
+  created() {
+    this.statePizza = this.getState();
   },
 };
 </script>

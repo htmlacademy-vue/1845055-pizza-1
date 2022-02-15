@@ -43,7 +43,9 @@
                 >
               </AppDrag>
 
-              <div class="counter counter--orange ingridients__counter">
+              <ItemCounter :elemIngredients="elemIngredients" />
+
+              <!-- <div class="counter counter--orange ingridients__counter">
                 <button
                   type="button"
                   class="
@@ -57,7 +59,7 @@
                   <span class="visually-hidden">Меньше</span>
                 </button>
                 <input
-                  :value="valIngredients(elemIngredients)"
+                  :value="valueIngredient"
                   type="text"
                   name="counter"
                   class="counter__input"
@@ -70,7 +72,7 @@
                 >
                   <span class="visually-hidden">Больше</span>
                 </button>
-              </div>
+              </div> -->
             </li>
           </ul>
         </div>
@@ -81,36 +83,33 @@
 
 <script>
 import AppDrag from "@/common/components/AppDrag.vue";
-import { counterLimit } from "@/modules/builder/constants.js";
+import ItemCounter from "@/common/components/ItemCounter.vue";
 
 export default {
   name: "BuilderIngredientsSelector",
   components: {
     AppDrag,
+    ItemCounter,
   },
-  props: {
-    onlySauces: {
-      type: Array,
-      required: true,
-    },
-    builderPizzaIngredients: {
-      type: Array,
-      required: true,
-    },
-    statePizza: {
-      type: Object,
-      required: true,
-    },
-    selectedSauces: {
-      type: String,
-      required: true,
-    },
-  },
-  // data: () => {
+  // data() {
   //   return {
-  //     counterLimit: counterLimit,
+  //     valueIngredient: 0,
   //   };
   // },
+  computed: {
+    onlySauces: function () {
+      return this.$store.getters["Builder/getPizza"]["sauces"];
+    },
+    statePizza: function () {
+      return this.$store.getters["Builder/getStatePizza"];
+    },
+    builderPizzaIngredients: function () {
+      return this.$store.getters["Builder/getPizza"]["ingredients"];
+    },
+    selectedSauces: function () {
+      return this.$store.getters["Builder/getStatePizza"]["sauces"]["name"];
+    },
+  },
   methods: {
     draggableValue(ingredientName) {
       if (typeof this.statePizza.ingredients[ingredientName] != "undefined") {
@@ -120,26 +119,11 @@ export default {
       }
       return true;
     },
-    disabledButton(counter, ingredient) {
-      let valQuantity = this.valIngredients(ingredient);
-      if (counter == "plus") {
-        return valQuantity >= counterLimit.max;
-      } else {
-        return valQuantity <= counterLimit.min;
-      }
-    },
-    valIngredients(ingredient) {
-      let val = 0;
-      if (typeof this.statePizza.ingredients[ingredient.name] != "undefined") {
-        return this.statePizza.ingredients[ingredient.name].valQuantity;
-      }
-      return val;
-    },
-    setBuilderQuantity(counter, ingredient) {
-      this.$emit("setBuilderQuantity", counter, ingredient);
-    },
     setSauces(val) {
-      this.$emit("setSauces", val);
+      this.$store.commit("Builder/setSauces", {
+        name: val.name,
+        price: val.price,
+      });
     },
     getValueSauces(name) {
       if (name == "Томатный") {
