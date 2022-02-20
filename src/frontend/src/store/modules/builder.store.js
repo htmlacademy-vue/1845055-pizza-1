@@ -1,10 +1,46 @@
 import pizza from "@/static/pizza.json";
+import Vue from "vue";
+
+const DefaultStatePizza = {
+  name: "",
+  dough: {
+    name: "Тонкое",
+    price: 300,
+  },
+  size: {
+    multi: 2,
+    diametr: "32 см",
+  },
+  sauces: {
+    name: "Томатный",
+    price: 50,
+  },
+  ingredients: {},
+};
+
+const Test = () => {
+  return {
+    name: "",
+    dough: {
+      name: "Тонкое",
+      price: 300,
+    },
+    size: {
+      multi: 2,
+      diametr: "32 см",
+    },
+    sauces: {
+      name: "Томатный",
+      price: 50,
+    },
+    ingredients: {},
+  };
+};
 
 const state = {
   pizza: pizza,
   statePizza: {
     name: "",
-    totalPrice: 700,
     dough: {
       name: "Тонкое",
       price: 300,
@@ -22,12 +58,6 @@ const state = {
 };
 
 const getters = {
-  getPizza(state) {
-    return state.pizza;
-  },
-  getStatePizza(state) {
-    return state.statePizza;
-  },
   getPricePizza(state) {
     let multi = state.statePizza.size.multi;
     let priceDough = state.statePizza.dough.price;
@@ -39,9 +69,8 @@ const getters = {
         state.statePizza.ingredients[i].price *
           state.statePizza.ingredients[i].valQuantity;
     }
-    state.statePizza.totalPrice =
-      multi * (priceDough + priceSauce + priceIngredient);
-    return state.statePizza.totalPrice;
+    return multi * (priceDough + priceSauce + priceIngredient);
+    // return state.statePizza.totalPrice;
   },
 };
 
@@ -50,8 +79,11 @@ const mutations = {
     state.statePizza.dough.name = payload.name;
     state.statePizza.dough.price = payload.price;
   },
-  setMulti(state, val) {
-    state.statePizza.size.multi = val;
+  setMulti(state, payload) {
+    Vue.set(state.statePizza, "size", {
+      diametr: payload.diametr,
+      multi: payload.multi,
+    });
   },
   setSauces(state, payload) {
     state.statePizza.sauces.name = payload.name;
@@ -76,15 +108,15 @@ const mutations = {
       valQuantity = 0;
     }
     //
-    // this.$set(state.statePizza.ingredients, ingredient.name, {
-    //   price: ingredient.price,
-    //   valQuantity: valQuantity,
-    // });
-    // this.priceCounter();
-    state.statePizza.ingredients[ingredient.name] = {
+    Vue.set(state.statePizza.ingredients, ingredient.name, {
       price: ingredient.price,
       valQuantity: valQuantity,
-    };
+    });
+    // this.priceCounter();
+    // state.statePizza.ingredients[ingredient.name] = {
+    //   price: ingredient.price,
+    //   valQuantity: valQuantity,
+    // };
     state.pizza.ingredients.forEach((element) => {
       if (element.name == ingredient.name) {
         element.value = valQuantity;
@@ -93,6 +125,14 @@ const mutations = {
   },
   setName(state, payload) {
     state.statePizza.name = payload.name;
+  },
+  newPizza(state) {
+    // console.log("new");
+    Vue.set(state, "statePizza", Test());
+  },
+  updatePizza(state, val) {
+    // console.log(val);
+    Vue.set(state, "statePizza", val);
   },
 };
 

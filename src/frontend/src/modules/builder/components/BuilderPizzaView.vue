@@ -3,6 +3,7 @@
     <label class="input">
       <span class="visually-hidden">Название пиццы</span>
       <input
+        :value="statePizza.name"
         type="text"
         name="pizza_name"
         placeholder="Введите название пиццы"
@@ -24,7 +25,6 @@
         </div>
       </div>
     </AppDrop>
-
     <BuilderPriceCounter />
   </div>
 </template>
@@ -32,28 +32,17 @@
 <script>
 import BuilderPriceCounter from "./BuilderPriceCounter.vue";
 import AppDrop from "@/common/components/AppDrop.vue";
+import { mapState } from "vuex";
 export default {
   components: {
     BuilderPriceCounter,
     AppDrop,
   },
   name: "BuilderPizzaView",
-  data() {
-    return {
-      statePizza: {},
-    };
-  },
-  watch: {
-    statePizza: function (val) {
-      // console.log(val);
-      // console.log(oldVal);
-      val = this.getState();
-    },
-  },
   computed: {
-    // statePizza: function () {
-    //   return getState();
-    // },
+    ...mapState("Builder", {
+      statePizza: (state) => state.statePizza,
+    }),
     getClassPizza: function () {
       let className = "pizza--foundation--";
       if (this.statePizza.dough.name == "Тонкое") {
@@ -70,9 +59,6 @@ export default {
     },
   },
   methods: {
-    getState() {
-      return this.$store.getters["Builder/getStatePizza"];
-    },
     setName: function (event) {
       this.$store.commit("Builder/setName", {
         name: event.target.value,
@@ -114,7 +100,7 @@ export default {
       }
     },
     getClassFillingIngredients(key) {
-      console.log(key);
+      // console.log(key);
       let classIng = this.getClassIngredients(key);
       if (this.statePizza.ingredients[key].valQuantity == 2) {
         classIng += " pizza__filling--second";
@@ -133,9 +119,6 @@ export default {
       // this.statePizza = this.$store.getters["Builder/getStatePizza"];
       //this.$emit("setDrop", val);
     },
-  },
-  created() {
-    this.statePizza = this.getState();
   },
 };
 </script>

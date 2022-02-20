@@ -26,25 +26,24 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "BuilderSizeSelector",
 
   computed: {
-    onlySize: function () {
-      return this.$store.getters["Builder/getPizza"]["sizes"];
-    },
-    selectedSize: function () {
-      return this.$store.getters["Builder/getStatePizza"]["size"]["diametr"];
-    },
+    ...mapState("Builder", {
+      onlySize: (state) => state.pizza["sizes"],
+      selectedSize: (state) => state.statePizza["size"]["diametr"],
+    }),
   },
   methods: {
     setMulti(name) {
       if (name == "23 см") {
-        this.$store.commit("Builder/setMulti", 1);
+        this.$store.commit("Builder/setMulti", { diametr: name, multi: 1 });
       } else if (name == "32 см") {
-        this.$store.commit("Builder/setMulti", 2);
+        this.$store.commit("Builder/setMulti", { diametr: name, multi: 2 });
       } else if (name == "45 см") {
-        this.$store.commit("Builder/setMulti", 3);
+        this.$store.commit("Builder/setMulti", { diametr: name, multi: 3 });
       }
     },
     getValueSize(name) {

@@ -11,7 +11,7 @@
       </router-link>
     </div>
     <div class="header__cart">
-      <router-link to="/cart"> 0 ₽</router-link>
+      <router-link to="/cart"> {{ getOrderPrice }} ₽</router-link>
     </div>
     <div v-if="!isLoggin" class="header__user">
       <a href="#" class="header__login" @click.prevent="logIn()">
@@ -47,6 +47,9 @@ export default {
     },
     user: function () {
       return this.$store.getters["Auth/getUser"];
+    },
+    getOrderPrice: function () {
+      return this.$store.getters["Cart/getOrderPrice"];
     },
   },
   methods: {

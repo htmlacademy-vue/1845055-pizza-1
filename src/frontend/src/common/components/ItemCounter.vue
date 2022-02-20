@@ -1,10 +1,10 @@
 <template>
-  <div class="counter counter--orange ingridients__counter">
+  <div class="counter counter--orange" :class="classItem">
     <button
       type="button"
       class="counter__button counter__button--disabled counter__button--minus"
       @click="setBuilderQuantity('minus', elemIngredients)"
-      :disabled="disabledButton('minus', elemIngredients)"
+      :disabled="disabledButtonMin"
     >
       <span class="visually-hidden">Меньше</span>
     </button>
@@ -17,8 +17,9 @@
     <button
       type="button"
       class="counter__button counter__button--plus"
+      :class="{ 'counter__button--orange': orange }"
       @click="setBuilderQuantity('plus', elemIngredients)"
-      :disabled="disabledButton('plus', elemIngredients)"
+      :disabled="disabledButtonPlus"
     >
       <span class="visually-hidden">Больше</span>
     </button>
@@ -26,58 +27,49 @@
 </template>
 
 <script>
-import { counterLimit } from "@/modules/builder/constants.js";
 export default {
   name: "ItemCounter",
-  data() {
-    return {
-      valueIngredient: 0,
-    };
-  },
   props: {
+    valueIngredient: {
+      type: Number,
+      required: true,
+    },
     elemIngredients: {
       type: Object,
       required: true,
     },
+    counterLimitMax: {
+      type: Number,
+      required: true,
+    },
+    counterLimitMin: {
+      type: Number,
+      required: true,
+    },
+    orange: {
+      type: Boolean,
+      required: true,
+    },
+    classItem: {
+      type: String,
+      required: true,
+    },
   },
-  watch: {
-    valueIngredient: function (val) {
-      // console.log(val);
-      // console.log(oldVal);
-      val = this.getvalueIngredient();
+  computed: {
+    disabledButtonPlus: function () {
+      return this.valueIngredient >= this.counterLimitMax;
+    },
+    disabledButtonMin: function () {
+      return this.valueIngredient <= this.counterLimitMin;
     },
   },
   methods: {
-    getvalueIngredient() {
-      let strIngredient =
-        this.$store.getters["Builder/getStatePizza"]["ingredients"][
-          this.elemIngredients.name
-        ];
-      if (typeof strIngredient != "undefined") {
-        return strIngredient.valQuantity;
-      } else {
-        return 0;
-      }
-    },
-    disabledButton(counter) {
-      if (counter == "plus") {
-        return this.valueIngredient >= counterLimit.max;
-      } else {
-        return this.valueIngredient <= counterLimit.min;
-      }
-    },
-
     setBuilderQuantity(counter, ingredient) {
-      this.$store.commit("Builder/setBuilderQuantity", {
+      this.$emit("setBuilderQuantity", {
         counter: counter,
         ingredient: ingredient,
       });
-      this.valueIngredient = this.getvalueIngredient();
-      this.disabledButton(counter);
     },
-  },
-  created() {
-    this.valueIngredient = this.getvalueIngredient();
   },
 };
 </script>

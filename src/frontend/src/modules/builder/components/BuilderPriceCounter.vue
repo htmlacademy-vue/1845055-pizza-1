@@ -15,25 +15,14 @@
 <script>
 export default {
   name: "BuilderPriceCounter",
-  // props: {
-  //   // statePizza: {
-  //   //   type: Object,
-  //   //   required: true,
-  //   // },
-  //   // totalPrice: {
-  //   //   type: Number,
-  //   //   required: true,
-  //   // },
-  // },
   computed: {
     totalPrice: function () {
       return this.$store.getters["Builder/getPricePizza"];
     },
-    statePizza: function () {
-      return this.$store.getters["Builder/getStatePizza"];
-    },
     pizzaReady: function () {
-      return this.totalPrice > 0 && this.statePizza.name != "";
+      return (
+        this.totalPrice > 0 && this.$store.state.Builder.statePizza.name != ""
+      );
     },
     getClassButton: function () {
       return ["button", { "button--disabled": !this.pizzaReady }];
@@ -41,7 +30,10 @@ export default {
   },
   methods: {
     addInOrder() {
-      console.log("add in order");
+      this.$store.commit("Cart/addPizza", {
+        statePizza: this.$store.state.Builder.statePizza,
+        totalPrice: this.totalPrice,
+      });
     },
   },
 };

@@ -1,8 +1,14 @@
-import users from "@/static/user.json";
+import user from "@/static/user.json";
 
 const state = {
-  user: users[0],
+  user: user,
   isLoggin: false,
+  address: {
+    street: "",
+    apartment: "",
+    house: "",
+    phone: "",
+  },
 };
 
 const getters = {
@@ -17,6 +23,9 @@ const getters = {
 const mutations = {
   isLogg(state, n) {
     state.isLoggin = n;
+  },
+  setAddress(state, payload) {
+    state.address[payload.name] = payload.value;
   },
 };
 

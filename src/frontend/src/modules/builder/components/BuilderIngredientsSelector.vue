@@ -43,7 +43,15 @@
                 >
               </AppDrag>
 
-              <ItemCounter :elemIngredients="elemIngredients" />
+              <ItemCounter
+                :elemIngredients="elemIngredients"
+                :valueIngredient="getValueIngredient(elemIngredients)"
+                :counterLimitMax="counterLimitMax"
+                :counterLimitMin="counterLimitMin"
+                :orange="false"
+                @setBuilderQuantity="setBuilderQuantity"
+                :classItem="getClassItem"
+              />
 
               <!-- <div class="counter counter--orange ingridients__counter">
                 <button
@@ -84,33 +92,47 @@
 <script>
 import AppDrag from "@/common/components/AppDrag.vue";
 import ItemCounter from "@/common/components/ItemCounter.vue";
-
+import { counterLimit } from "@/modules/builder/constants.js";
+import { mapState } from "vuex";
 export default {
   name: "BuilderIngredientsSelector",
   components: {
     AppDrag,
     ItemCounter,
   },
-  // data() {
-  //   return {
-  //     valueIngredient: 0,
-  //   };
-  // },
   computed: {
-    onlySauces: function () {
-      return this.$store.getters["Builder/getPizza"]["sauces"];
+    ...mapState("Builder", {
+      onlySauces: (state) => state.pizza["sauces"],
+      statePizza: (state) => state.statePizza,
+      builderPizzaIngredients: (state) => state.pizza["ingredients"],
+      selectedSauces: (state) => state.statePizza["sauces"]["name"],
+    }),
+    getClassItem: function () {
+      return "ingridients__counter";
     },
-    statePizza: function () {
-      return this.$store.getters["Builder/getStatePizza"];
+    counterLimitMax: function () {
+      return counterLimit.max;
     },
-    builderPizzaIngredients: function () {
-      return this.$store.getters["Builder/getPizza"]["ingredients"];
-    },
-    selectedSauces: function () {
-      return this.$store.getters["Builder/getStatePizza"]["sauces"]["name"];
+    counterLimitMin: function () {
+      return counterLimit.min;
     },
   },
   methods: {
+    setBuilderQuantity(obj) {
+      this.$store.commit("Builder/setBuilderQuantity", {
+        counter: obj.counter,
+        ingredient: obj.ingredient,
+      });
+    },
+    getValueIngredient(elemIngredients) {
+      return (
+        this.statePizza.ingredients[elemIngredients.name]?.valQuantity || 0
+      );
+      // return (
+      //   this.$store.state.Builder.statePizza.ingredients[elemIngredients.name]
+      //     ?.valQuantity || 0
+      // );
+    },
     draggableValue(ingredientName) {
       if (typeof this.statePizza.ingredients[ingredientName] != "undefined") {
         if (this.statePizza.ingredients[ingredientName].valQuantity >= 3) {

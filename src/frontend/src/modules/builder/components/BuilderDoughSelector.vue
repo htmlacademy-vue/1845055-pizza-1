@@ -27,15 +27,14 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "BuilderDoughSelector",
   computed: {
-    onlyDough: function () {
-      return this.$store.getters["Builder/getPizza"]["dough"];
-    },
-    selectedDough: function () {
-      return this.$store.getters["Builder/getStatePizza"]["dough"]["name"];
-    },
+    ...mapState("Builder", {
+      onlyDough: (state) => state.pizza["dough"],
+      selectedDough: (state) => state.statePizza["dough"]["name"],
+    }),
   },
   methods: {
     setDough(val) {

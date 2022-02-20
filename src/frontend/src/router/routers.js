@@ -3,6 +3,7 @@ import Login from "../views/Login.vue";
 import Cart from "../views/Cart.vue";
 import Orders from "../views/Orders.vue";
 import Profile from "../views/Profile.vue";
+import Popup from "../views/Popup.vue";
 
 const routes = [
   {
@@ -65,6 +66,16 @@ const routes = [
       layout: "AppLayoutDefault",
       routeNameForLogin: null,
       routeNameForUnauthorized: null,
+    },
+  },
+  {
+    path: "/popup",
+    name: "Popup",
+    component: Popup,
+    meta: {
+      layout: "AppLayoutMain",
+      routeNameForLogin: "Login",
+      routeNameForUnauthorized: "Index",
     },
   },
 ];
