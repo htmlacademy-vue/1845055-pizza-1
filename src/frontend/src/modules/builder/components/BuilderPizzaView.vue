@@ -3,6 +3,7 @@
     <label class="input">
       <span class="visually-hidden">Название пиццы</span>
       <input
+        :value="statePizza.name"
         type="text"
         name="pizza_name"
         placeholder="Введите название пиццы"
@@ -24,31 +25,24 @@
         </div>
       </div>
     </AppDrop>
-
-    <BuilderPriceCounter :statePizza="statePizza" :totalPrice="totalPrice" />
+    <BuilderPriceCounter />
   </div>
 </template>
 
 <script>
 import BuilderPriceCounter from "./BuilderPriceCounter.vue";
 import AppDrop from "@/common/components/AppDrop.vue";
+import { mapState } from "vuex";
 export default {
   components: {
     BuilderPriceCounter,
     AppDrop,
   },
   name: "BuilderPizzaView",
-  props: {
-    statePizza: {
-      type: Object,
-      required: true,
-    },
-    totalPrice: {
-      type: Number,
-      required: true,
-    },
-  },
   computed: {
+    ...mapState("Builder", {
+      statePizza: (state) => state.statePizza,
+    }),
     getClassPizza: function () {
       let className = "pizza--foundation--";
       if (this.statePizza.dough.name == "Тонкое") {
@@ -66,7 +60,9 @@ export default {
   },
   methods: {
     setName: function (event) {
-      this.$emit("setName", event.target.value);
+      this.$store.commit("Builder/setName", {
+        name: event.target.value,
+      });
     },
     getClassIngredients(name) {
       if (name == "Грибы") {
@@ -104,6 +100,7 @@ export default {
       }
     },
     getClassFillingIngredients(key) {
+      // console.log(key);
       let classIng = this.getClassIngredients(key);
       if (this.statePizza.ingredients[key].valQuantity == 2) {
         classIng += " pizza__filling--second";
@@ -115,7 +112,12 @@ export default {
       return classIng;
     },
     setDrop(val) {
-      this.$emit("setDrop", val);
+      this.$store.commit("Builder/setBuilderQuantity", {
+        counter: "plus",
+        ingredient: val,
+      });
+      // this.statePizza = this.$store.getters["Builder/getStatePizza"];
+      //this.$emit("setDrop", val);
     },
   },
 };

@@ -43,7 +43,17 @@
                 >
               </AppDrag>
 
-              <div class="counter counter--orange ingridients__counter">
+              <ItemCounter
+                :elemIngredients="elemIngredients"
+                :valueIngredient="getValueIngredient(elemIngredients)"
+                :counterLimitMax="counterLimitMax"
+                :counterLimitMin="counterLimitMin"
+                :orange="false"
+                @setBuilderQuantity="setBuilderQuantity"
+                :classItem="getClassItem"
+              />
+
+              <!-- <div class="counter counter--orange ingridients__counter">
                 <button
                   type="button"
                   class="
@@ -57,7 +67,7 @@
                   <span class="visually-hidden">Меньше</span>
                 </button>
                 <input
-                  :value="valIngredients(elemIngredients)"
+                  :value="valueIngredient"
                   type="text"
                   name="counter"
                   class="counter__input"
@@ -70,7 +80,7 @@
                 >
                   <span class="visually-hidden">Больше</span>
                 </button>
-              </div>
+              </div> -->
             </li>
           </ul>
         </div>
@@ -81,37 +91,48 @@
 
 <script>
 import AppDrag from "@/common/components/AppDrag.vue";
+import ItemCounter from "@/common/components/ItemCounter.vue";
 import { counterLimit } from "@/modules/builder/constants.js";
-
+import { mapState } from "vuex";
 export default {
   name: "BuilderIngredientsSelector",
   components: {
     AppDrag,
+    ItemCounter,
   },
-  props: {
-    onlySauces: {
-      type: Array,
-      required: true,
+  computed: {
+    ...mapState("Builder", {
+      onlySauces: (state) => state.pizza["sauces"],
+      statePizza: (state) => state.statePizza,
+      builderPizzaIngredients: (state) => state.pizza["ingredients"],
+      selectedSauces: (state) => state.statePizza["sauces"]["name"],
+    }),
+    getClassItem: function () {
+      return "ingridients__counter";
     },
-    builderPizzaIngredients: {
-      type: Array,
-      required: true,
+    counterLimitMax: function () {
+      return counterLimit.max;
     },
-    statePizza: {
-      type: Object,
-      required: true,
-    },
-    selectedSauces: {
-      type: String,
-      required: true,
+    counterLimitMin: function () {
+      return counterLimit.min;
     },
   },
-  // data: () => {
-  //   return {
-  //     counterLimit: counterLimit,
-  //   };
-  // },
   methods: {
+    setBuilderQuantity(obj) {
+      this.$store.commit("Builder/setBuilderQuantity", {
+        counter: obj.counter,
+        ingredient: obj.ingredient,
+      });
+    },
+    getValueIngredient(elemIngredients) {
+      return (
+        this.statePizza.ingredients[elemIngredients.name]?.valQuantity || 0
+      );
+      // return (
+      //   this.$store.state.Builder.statePizza.ingredients[elemIngredients.name]
+      //     ?.valQuantity || 0
+      // );
+    },
     draggableValue(ingredientName) {
       if (typeof this.statePizza.ingredients[ingredientName] != "undefined") {
         if (this.statePizza.ingredients[ingredientName].valQuantity >= 3) {
@@ -120,26 +141,11 @@ export default {
       }
       return true;
     },
-    disabledButton(counter, ingredient) {
-      let valQuantity = this.valIngredients(ingredient);
-      if (counter == "plus") {
-        return valQuantity >= counterLimit.max;
-      } else {
-        return valQuantity <= counterLimit.min;
-      }
-    },
-    valIngredients(ingredient) {
-      let val = 0;
-      if (typeof this.statePizza.ingredients[ingredient.name] != "undefined") {
-        return this.statePizza.ingredients[ingredient.name].valQuantity;
-      }
-      return val;
-    },
-    setBuilderQuantity(counter, ingredient) {
-      this.$emit("setBuilderQuantity", counter, ingredient);
-    },
     setSauces(val) {
-      this.$emit("setSauces", val);
+      this.$store.commit("Builder/setSauces", {
+        name: val.name,
+        price: val.price,
+      });
     },
     getValueSauces(name) {
       if (name == "Томатный") {

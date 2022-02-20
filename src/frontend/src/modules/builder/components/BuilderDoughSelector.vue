@@ -27,21 +27,21 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "BuilderDoughSelector",
-  props: {
-    onlyDough: {
-      type: Array,
-      required: true,
-    },
-    selectedDough: {
-      type: String,
-      required: true,
-    },
+  computed: {
+    ...mapState("Builder", {
+      onlyDough: (state) => state.pizza["dough"],
+      selectedDough: (state) => state.statePizza["dough"]["name"],
+    }),
   },
   methods: {
     setDough(val) {
-      this.$emit("setDough", val);
+      this.$store.commit("Builder/setDough", {
+        name: val.name,
+        price: val.price,
+      });
     },
     getValueDough(name) {
       if (name == "Тонкое") {

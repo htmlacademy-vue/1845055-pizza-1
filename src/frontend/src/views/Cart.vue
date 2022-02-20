@@ -1,18 +1,17 @@
 <template>
-  <section>
-    <main class="content cart">
-      <div class="container">
-        <div class="cart__title">
-          <h1 class="title title--big">Корзина</h1>
-        </div>
-      </div>
-    </main>
-    <router-view />
-  </section>
+  <div>
+    <CartShopping />
+  </div>
 </template>
 
 <script>
-export default {};
+import CartShopping from "@/modules/cart/CartShopping.vue";
+export default {
+  name: "Cart",
+  components: {
+    CartShopping,
+  },
+};
 </script>
 
 <style scoped></style>

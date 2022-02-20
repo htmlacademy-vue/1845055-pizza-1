@@ -33,7 +33,7 @@ export default {
   methods: {
     authorize() {
       console.log("auto");
-      this.$emit("userLoggin");
+      this.$store.commit("Auth/isLogg", true);
       this.$nextTick(() => {
         this.$router.go(-1);
       });
